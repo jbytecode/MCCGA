@@ -3,6 +3,12 @@ module MCCGA
 import Optim
 import Statistics
 
+export bits 
+export floats 
+export initialprobs 
+export sample
+export mccga
+
 function bits(f::T)::Array{Int8,1} where {T<:Number}
     strbits = Float32(f) |> bitstring |> x -> split(x, "")
     return map(x -> parse(Int8, x), strbits)
