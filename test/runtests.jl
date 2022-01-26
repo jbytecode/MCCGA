@@ -101,7 +101,6 @@ end
     )
 
     @test result isa Dict
-    @test length(result) == 2
 
     finalsolution = result["final_solution"]
 
