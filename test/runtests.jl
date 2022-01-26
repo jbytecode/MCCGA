@@ -1,23 +1,63 @@
-using MCCGA 
-using Test 
+using MCCGA
+using Test
 
-@testset "Bit operations" begin 
-    
-    tol = 0.001
+@testset "Bit operations" begin
 
-    v = [2.71828, 3.14159265, 1.0, 5, -100]
-    
-    mybits = bits(v)
+    @testset "Bit-float conversations" begin
+        tol = 0.001
 
-    myfloats = floats(mybits)
+        v = [2.71828, 3.14159265, 1.0, 5, -100]
 
-    @test length(mybits) == 32 * length(v)
-    @test length(myfloats) == length(v)
+        mybits = bits(v)
 
-    for i in 1:length(v)
-        @test isapprox(v[i], myfloats[i], atol = tol)
+        myfloats = floats(mybits)
+
+        @test length(mybits) == 32 * length(v)
+        @test length(myfloats) == length(v)
+
+        for i = 1:length(v)
+            @test isapprox(v[i], myfloats[i], atol = tol)
+        end
+    end
+
+    @testset "Sign bit test" begin
+        mybits1 = bits(9.8)
+        mybits2 = bits(-9.8)
+
+        @test mybits1[1] == 0
+        @test mybits2[1] == 1
+    end
+
+    @testset "Infinity bits" begin
+        
+        infbits = [0, 1, 1, 1, 1, 1, 1, 1, 1, 
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                   0, 0, 0, 0, 0]
+
+        mybits1 = bits(Inf64)
+        mybits2 = bits(Inf32)
+        mybits3  = bits(Inf)
+
+        @test mybits1 == infbits
+        @test mybits2 == infbits 
+        @test mybits3 == infbits 
     end 
-end 
+
+    @testset "NaN bits" begin 
+        nanbits = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+        mybits1 = bits(NaN64)
+        mybits2 = bits(NaN32)
+        mybits3  = bits(NaN)
+
+        @test mybits1 == nanbits 
+        @test mybits2 == nanbits  
+        @test mybits3 == nanbits      
+    end
+end
 
 @testset "Sampling" begin
     @testset "Convergency state" begin
@@ -28,7 +68,7 @@ end
         @test mysample[1] == 1.0
         @test mysample[2] == 1.0
         @test mysample[3] == 1.0
-    end 
+    end
 
     @testset "Normal state" begin
         probvector = [0.5, 0.5, 0.5]
@@ -41,25 +81,26 @@ end
         @test mysample[1] <= 1.0
         @test mysample[2] <= 1.0
         @test mysample[3] <= 1.0
-    end 
-end 
+    end
+end
 
 @testset "Optimization of Pi and E" begin
     function f(x)
-        return (x[1] - 3.14159265)^2 + (x[2] - exp(1.0))^2 
-    end 
+        return (x[1] - 3.14159265)^2 + (x[2] - exp(1.0))^2
+    end
 
     lower = [-100.0, -100.0]
     upper = [100.0, 100.0]
 
     result = MCCGA.mccga(
-        lower = lower, 
-        upper = upper, 
-        costfunction = f, 
-        popsize = 100, maxsamples = 10000
+        lower = lower,
+        upper = upper,
+        costfunction = f,
+        popsize = 100,
+        maxsamples = 10000,
     )
 
-    @test result isa Dict 
+    @test result isa Dict
     @test length(result) == 2
 
     finalsolution = result["final_solution"]
