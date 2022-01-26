@@ -1,6 +1,24 @@
 using MCCGA 
 using Test 
 
+@testset "Bit operations" begin 
+    
+    tol = 0.001
+
+    v = [2.71828, 3.14159265, 1.0, 5, -100]
+    
+    mybits = bits(v)
+
+    myfloats = floats(mybits)
+
+    @test length(mybits) == 32 * length(v)
+    @test length(myfloats) == length(v)
+
+    for i in 1:length(v)
+        @test isapprox(v[i], myfloats[i], atol = tol)
+    end 
+end 
+
 @testset "Sampling" begin
     @testset "Convergency state" begin
         probvector = [1.0, 1.0, 1.0]
