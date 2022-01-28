@@ -89,11 +89,7 @@ Satman, Mehmet Hakan, and Emre Akadal. "Makine Kodlu Hibrit Kompakt Genetik Algo
 Optimizasyon Yöntemi", TR Patent 2018-GE-510,239    
 """
 function bits(fs::Array{T,1})::Array{Int8,1} where {T<:Number}
-    mybits = Array{Int8,1}(undef, 0)
-    for value in fs
-        mybits = vcat(mybits, bits(value))
-    end
-    return mybits
+    return map(x -> bits(x), fs) |> x -> vcat(x...)
 end
 
 
