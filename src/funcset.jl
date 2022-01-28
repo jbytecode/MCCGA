@@ -5,6 +5,7 @@ two-variable function
 x = 5.90133
 y = 0.5
 fmin = -43.3159 
+-30 <= x, y <= 30
 =#
 function chichinadze(pars)
     @assert(length(pars) == 2)
@@ -19,6 +20,7 @@ end
 n-variable function
 x = [1, 1, ..., 1]
 fmin = 0
+-10 <= x_i <= 10
 =#
 function levy(pars)
     d = length(pars)
@@ -41,4 +43,38 @@ function levy(pars)
 
     return term1 + sum + term3
 end
+
+
+#=
+n-variable function
+x = [0, 0, ..., 0]
+fmin = 0
+-32.768 <= x_i <= 32.768
+=#
+function ackley(xx)
+    d = length(xx)
+    a = 20
+    b = 0.2
+    c = 2 * pi
+  
+    sum1 = 0
+    for i in 1:d
+        sum1 = sum1 + xx[i]^2
+    end
+
+    sum2 = 0
+    for i in 1:d
+        sum2 = sum2 + cos(c * xx[i])
+    end
+  
+    term1 = -a * exp(-b*sqrt(sum1/d))
+    term2 = -exp(sum2/d)
+  
+    y = term1 + term2 + a + exp(1)
+
+    return(y)
+end
+
+
 end 
+

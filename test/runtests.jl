@@ -222,3 +222,32 @@ end
     @test isapprox(finalsolution[3], 1.0, atol = tol)
     @test isapprox(finalminimum, 0.0, atol = tol)
 end
+
+
+
+@testset "Ackley" begin
+
+    tol = 0.001
+
+    lower = [-32.768, -32.768, -32.768]
+    upper = [32.768, 32.768, 32.768]
+
+
+    result = MCCGA.mccga(
+        lower = lower,
+        upper = upper,
+        costfunction = Functions.ackley,
+        popsize = 100,
+        maxsamples = 10000,
+    )
+
+
+    finalsolution = result["final_solution"]
+    finalminimum = result["final_minimum"]
+
+    @test isapprox(finalsolution[1], 0.0, atol = tol)
+    @test isapprox(finalsolution[2], 0.0, atol = tol)
+    @test isapprox(finalsolution[3], 0.0, atol = tol)
+    @test isapprox(finalminimum, 0.0, atol = tol)
+end
+
