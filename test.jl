@@ -1,13 +1,16 @@
 using MCCGA
 
 
-lower = [-100.0, -100.0]
-upper = [100.0, 100.0]
+lower = [-30.0, -30.0]
+upper = [30.0, 30.0]
 
-function ff(x)
-    return abs(x[1] - 3.141592) + abs(x[2] - exp(1.0))
-end 
+function Chichinadze(pars)
+    @assert(length(pars) == 2)
+   x = pars[1]
+   y = pars[2]
+   return x^2 - 12.0x + 11.0 + 10.0 * cos(pi * x / 2.0) + 8.0 * sin(5 * pi * x) - (1 / sqrt(5)) * exp(-0.5 * (y - 0.5)^2)
+end
 
 
 result = MCCGA.mccga(lower = lower, upper = upper, 
-                    costfunction = ff, popsize = 500, maxsamples = 1000)
+                    costfunction = Chichinadze, popsize = 200, maxsamples = 10000)

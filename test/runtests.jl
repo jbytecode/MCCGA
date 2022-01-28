@@ -29,33 +29,94 @@ using Test
     end
 
     @testset "Infinity bits" begin
-        
-        infbits = [0, 1, 1, 1, 1, 1, 1, 1, 1, 
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                   0, 0, 0, 0, 0]
+
+        infbits = [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        ]
 
         mybits1 = bits(Inf64)
         mybits2 = bits(Inf32)
-        mybits3  = bits(Inf)
+        mybits3 = bits(Inf)
 
         @test mybits1 == infbits
-        @test mybits2 == infbits 
-        @test mybits3 == infbits 
-    end 
+        @test mybits2 == infbits
+        @test mybits3 == infbits
+    end
 
-    @testset "NaN bits" begin 
-        nanbits = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    @testset "NaN bits" begin
+        nanbits = [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        ]
 
         mybits1 = bits(NaN64)
         mybits2 = bits(NaN32)
-        mybits3  = bits(NaN)
+        mybits3 = bits(NaN)
 
-        @test mybits1 == nanbits 
-        @test mybits2 == nanbits  
-        @test mybits3 == nanbits      
+        @test mybits1 == nanbits
+        @test mybits2 == nanbits
+        @test mybits3 == nanbits
     end
 end
 
@@ -110,4 +171,36 @@ end
     @test finalsolution[2] >= 2
     @test finalsolution[2] <= 3
 
+end
+
+@testset "Chichinadze" begin
+
+    tol = 0.001
+
+    lower = [-30.0, -30.0]
+    upper = [30.0, 30.0]
+
+    function Chichinadze(pars)
+        @assert(length(pars) == 2)
+        x = pars[1]
+        y = pars[2]
+        return x^2 - 12.0x + 11.0 + 10.0 * cos(pi * x / 2.0) + 8.0 * sin(5 * pi * x) -
+               (1 / sqrt(5)) * exp(-0.5 * (y - 0.5)^2)
+    end
+
+
+    result = MCCGA.mccga(
+        lower = lower,
+        upper = upper,
+        costfunction = Chichinadze,
+        popsize = 200,
+        maxsamples = 10000,
+    )
+
+    finalsolution = result["final_solution"]
+    finalminimum = result["final_minimum"]
+
+    @test isapprox(finalsolution[1], 5.90133, atol = tol)
+    @test isapprox(finalsolution[2], 0.5, atol = tol)
+    @test isapprox(finalminimum, -43.3159, atol = tol)
 end

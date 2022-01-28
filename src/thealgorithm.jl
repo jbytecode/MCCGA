@@ -72,7 +72,10 @@ function mccga(;
     resultdict["initial_prob_vector"] = initial_probvector
     resultdict["final_prob_vector"] = sampledvector
     resultdict["iterations"] = numiters
-    resultdict["initial_solution"] = floats(sample(probvector))
+    resultdict["initial_solution"] = floats(sampledvector)
     resultdict["final_solution"] = local_result.minimizer
+    resultdict["initial_minimum"] = costfunction(floats(sampledvector))
+    resultdict["final_minimum"] = costfunction(local_result.minimizer)
+    
     return resultdict
 end
