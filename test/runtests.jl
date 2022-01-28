@@ -180,19 +180,10 @@ end
     lower = [-30.0, -30.0]
     upper = [30.0, 30.0]
 
-    function Chichinadze(pars)
-        @assert(length(pars) == 2)
-        x = pars[1]
-        y = pars[2]
-        return x^2 - 12.0x + 11.0 + 10.0 * cos(pi * x / 2.0) + 8.0 * sin(5 * pi * x) -
-               (1 / sqrt(5)) * exp(-0.5 * (y - 0.5)^2)
-    end
-
-
     result = MCCGA.mccga(
         lower = lower,
         upper = upper,
-        costfunction = Chichinadze,
+        costfunction = Functions.chichinadze,
         popsize = 200,
         maxsamples = 10000,
     )
@@ -203,4 +194,31 @@ end
     @test isapprox(finalsolution[1], 5.90133, atol = tol)
     @test isapprox(finalsolution[2], 0.5, atol = tol)
     @test isapprox(finalminimum, -43.3159, atol = tol)
+end
+
+
+@testset "Levy" begin
+
+    tol = 0.001
+
+    lower = [-10.0, -10.0, -10]
+    upper = [10.0, 10.0, 10]
+
+
+    result = MCCGA.mccga(
+        lower = lower,
+        upper = upper,
+        costfunction = Functions.levy,
+        popsize = 100,
+        maxsamples = 10000,
+    )
+
+
+    finalsolution = result["final_solution"]
+    finalminimum = result["final_minimum"]
+
+    @test isapprox(finalsolution[1], 1.0, atol = tol)
+    @test isapprox(finalsolution[2], 1.0, atol = tol)
+    @test isapprox(finalsolution[3], 1.0, atol = tol)
+    @test isapprox(finalminimum, 0.0, atol = tol)
 end
