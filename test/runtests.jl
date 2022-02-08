@@ -3,6 +3,58 @@ using Test
 
 @testset "Bit operations" begin
 
+    @testset "Bits to float" begin
+        bitsofnumber = [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+
+        floatlist = floats(bitsofnumber)
+
+        @test floatlist isa Vector
+        @test length(floatlist) == 1
+        @test floatlist[1] == 1.1328125
+    end
+
+
+    @testset "Float to bits" begin
+        fvalue = 76289.375
+        fbits = bits(fvalue)
+
+        @test length(fbits) == 32
+        @test fbits == [0,1,0,0,0,1,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0]
+    end
+
     @testset "Bit-float conversations" begin
         tol = 0.001
 

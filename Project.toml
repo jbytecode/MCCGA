@@ -1,7 +1,7 @@
 name = "MCCGA"
 uuid = "731b7460-73c8-4471-aa45-99cedcd1e83e"
 authors = ["jbytecode <mhsatman@gmail.com>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
