@@ -1,4 +1,4 @@
 # MCCGA
-Machine-coded Compact Genetic Algorithms for real-values optimization problems in Julia
+Machine-coded Compact Genetic Algorithms for real-valued optimization problems in Julia
 
 
