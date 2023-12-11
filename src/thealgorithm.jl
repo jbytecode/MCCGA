@@ -23,6 +23,11 @@ function sample(probs::Array{T,1}) where {T<:Number}
     end, probs)
 end
 
+function isfeasible(constraintfunction::F, solution::Vector) where {F <: Function}
+    deviationvector = constraintfunction(solution)
+    return all(x -> iszero(x), deviationvector)
+end 
+
 function mccga(;
     lower::Array{T,1},
     upper::Array{T,1},

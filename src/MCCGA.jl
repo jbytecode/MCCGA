@@ -10,6 +10,7 @@ export bits
 export floats 
 export initialprobs 
 export sample
+export isfeasible
 export mccga
 
 
