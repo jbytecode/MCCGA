@@ -3,12 +3,12 @@ module MCCGA
 import Optim
 import Statistics
 
-export Functions 
+export Functions
 
 
-export bits 
-export floats 
-export initialprobs 
+export bits
+export floats
+export initialprobs
 export sample
 export isfeasible
 export mccga

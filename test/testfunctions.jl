@@ -103,3 +103,32 @@ end
     @test isapprox(finalsolution[3], 0.0, atol = tol)
     @test isapprox(finalminimum, 0.0, atol = tol)
 end
+
+
+
+# @testset "Schefel" begin
+# 
+#     tol = 0.001
+# 
+#     lower = [-500.0, -500.0, -500.0]
+#     upper = [500.0, 500.0, 500.0]
+# 
+#     result = MCCGA.mccga(
+#         lower = lower,
+#         upper = upper,
+#         costfunction = Functions.schefel,
+#         popsize = 1000,
+#         maxsamples = 10000,
+#     )
+# 
+# 
+#     finalsolution = result["final_solution"]
+#     finalminimum = result["final_minimum"]
+# 
+#     @info finalsolution
+# 
+#     @test isapprox(finalsolution[1], 420.9687, atol = tol)
+#     @test isapprox(finalsolution[2], 420.9687, atol = tol)
+#     @test isapprox(finalsolution[3], 420.9687, atol = tol)
+#     @test isapprox(finalminimum, 0.0, atol = tol)
+# end

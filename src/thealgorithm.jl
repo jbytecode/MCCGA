@@ -23,31 +23,31 @@ function sample(probs::Array{T,1}) where {T<:Number}
     end, probs)
 end
 
-function isfeasible(constraintfunction::F, solution::Vector) where {F <: Function}
+function isfeasible(constraintfunction::F, solution::Vector) where {F<:Function}
     deviationvector = constraintfunction(solution)
     return all(x -> iszero(x), deviationvector)
-end 
+end
 
-function getwinnerloser(ch1::Vector, ch2::Vector, costfunction::F) where {F <: Function}
+function getwinnerloser(ch1::Vector, ch2::Vector, costfunction::F) where {F<:Function}
     cost1 = costfunction(floats(ch1))
     cost2 = costfunction(floats(ch2))
-    
+
     winner = ch1
     loser = ch2
     if (cost2 < cost1)
         winner = ch2
         loser = ch1
-    end 
+    end
     return (winner, loser)
 end
- 
+
 
 function getwinnerloser(ch1, ch2, costfunction, constraintfunction)::Tuple
-    
+
     if isnothing(constraintfunction)
         return getwinnerloser(ch1, ch2, costfunction)
-    end 
-    
+    end
+
     fch1 = floats(ch1)
     fch2 = floats(ch2)
 
@@ -62,16 +62,17 @@ function getwinnerloser(ch1, ch2, costfunction, constraintfunction)::Tuple
         return (ch1, ch2)
     elseif !feasible1 && feasible2
         return (ch2, ch1)
-    else !feasible1 && !feasible2
-        sumviolence1 = constraintfunction(fch1) .|> abs |> sum 
-        sumviolence2 = constraintfunction(fch2) .|> abs |> sum 
+    else
+        !feasible1 && !feasible2
+        sumviolence1 = constraintfunction(fch1) .|> abs |> sum
+        sumviolence2 = constraintfunction(fch2) .|> abs |> sum
         if sumviolence1 < sumviolence2
             return (ch1, ch2)
-        else 
+        else
             return (ch2, ch1)
-        end 
-    end 
-end 
+        end
+    end
+end
 
 function mccga(;
     lower::Array{T,1},
@@ -79,10 +80,10 @@ function mccga(;
     costfunction::F,
     popsize::Int,
     maxsamples = 10000,
-    constraintfunction::Union{G, Nothing} = nothing,
-    λ = 1000
-) where {T<:Number, F <: Function, G <: Function}
-    
+    constraintfunction::Union{G,Nothing} = nothing,
+    λ = 1000,
+) where {T<:Number,F<:Function,G<:Function}
+
     probvector = initialprobs(lower, upper, maxsamples = maxsamples)
     initial_probvector = copy(probvector)
     chsize = length(probvector)
@@ -90,11 +91,11 @@ function mccga(;
     numiters = 0
 
     while !(all(x -> (x <= mutation) || (x >= 1.0 - mutation), probvector))
-        
+
         numiters += 1
         ch1 = sample(probvector)
         ch2 = sample(probvector)
-                
+
         winner, loser = getwinnerloser(ch1, ch2, costfunction, constraintfunction)
 
         for i = 1:chsize
@@ -116,19 +117,19 @@ function mccga(;
     sampledvector = sample(probvector)
     initial_solution = floats(sampledvector)
 
-   
+
     if isnothing(constraintfunction)
         local_result = Optim.optimize(costfunction, initial_solution, Optim.NelderMead())
     else
         function coupled(x)
             fx = costfunction(x)
             gx = constraintfunction(x)
-            result = fx + λ * sum(gx.^2.0) 
+            result = fx + λ * sum(gx .^ 2.0)
             return result
         end
         local_result = Optim.optimize(coupled, initial_solution, Optim.NelderMead())
     end
-   
+
     resultdict = Dict(
         "initial_prob_vector" => initial_probvector,
         "final_prob_vector" => sampledvector,
@@ -138,6 +139,6 @@ function mccga(;
         "initial_minimum" => costfunction(floats(sampledvector)),
         "final_minimum" => costfunction(local_result.minimizer),
     )
-   
+
     return resultdict
 end

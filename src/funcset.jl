@@ -1,4 +1,4 @@
-module Functions 
+module Functions
 
 #=
 two-variable function
@@ -27,7 +27,7 @@ function levy(pars)
 
     w = zeros(Float64, d)
 
-    for ii = 1:d
+    for ii ∈ 1:d
         w[ii] = 1 + (pars[ii] - 1.0) / 4.0
     end
 
@@ -35,7 +35,7 @@ function levy(pars)
     term3 = (w[d] - 1)^2.0 * (1 + (sin(2.0 * pi * w[d]))^2.0)
 
     sum = 0
-    for ii = 1:(d-1)
+    for ii ∈ 1:(d-1)
         wi = w[ii]
         new = (wi - 1)^2 * (1 + 10 * (sin(pi * wi + 1))^2)
         sum = sum + new
@@ -56,25 +56,41 @@ function ackley(xx)
     a = 20
     b = 0.2
     c = 2 * pi
-  
+
     sum1 = 0
-    for i in 1:d
+    for i = 1:d
         sum1 = sum1 + xx[i]^2
     end
 
     sum2 = 0
-    for i in 1:d
+    for i = 1:d
         sum2 = sum2 + cos(c * xx[i])
     end
-  
-    term1 = -a * exp(-b*sqrt(sum1/d))
-    term2 = -exp(sum2/d)
-  
+
+    term1 = -a * exp(-b * sqrt(sum1 / d))
+    term2 = -exp(sum2 / d)
+
     y = term1 + term2 + a + exp(1)
 
-    return(y)
+    return (y)
 end
 
 
-end 
+# -500 <= x_i <= 500
+# min f = 0 
+# at 
+# x_i = 420.9687
+function schefel(x)
+    d = length(x)
+    part1 = 418.9829 * d
 
+    part2 = 0.0
+    for i = 1:d
+        part2 += x[i] * sin(sqrt(abs(x[i])))
+    end
+
+    return part1 - part2
+end
+
+
+end # End of Module 

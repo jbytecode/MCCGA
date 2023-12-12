@@ -53,7 +53,7 @@ function bits(f::T)::Array{Int8,1} where {T<:Number}
     #return map(x -> parse(Int8, x), strbits)
     newf = Float32(f)
     casted = reinterpret(Int32, newf)
-    return map(i-> casted >> i & 1, 31:(-1):0)
+    return map(i -> casted >> i & 1, 31:(-1):0)
 end
 
 

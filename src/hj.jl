@@ -4,7 +4,7 @@ function hj(
     maxiter = 1000,
     startstep = 5.0,
     endstep = 0.0001,
-) where {FType <: Function}
+) where {FType<:Function}
     p = length(par)
     currentstep = startstep
     iter::Int64 = 0
