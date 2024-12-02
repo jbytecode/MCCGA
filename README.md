@@ -1,3 +1,8 @@
+## Warning: This algorithm is included in the Metaheuristics.jl package; please use the version available in that package.
+
+__________________________________________
+
+
 # MCCGA
 Machine-coded Compact Genetic Algorithms for real-valued optimization problems in Julia
 
