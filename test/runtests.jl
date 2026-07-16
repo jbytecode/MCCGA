@@ -6,4 +6,5 @@ include("testbitoperations.jl")
 include("testsampling.jl")
 include("testfunctions.jl")
 include("testisfeasible.jl")
+include("testhj.jl")
 
