@@ -25,12 +25,16 @@ function initialprobs(
     return colmeans(mat)
 end
 
+
 function sample(probs::Array{T,1}) where {T<:Number}
-    return map(x -> if rand() < x
-        1
-    else
-        0
-    end, probs)
+    function mapper(f::T) where {T<:Number}
+        if rand() < f
+            return 1
+        else
+            return 0
+        end
+    end 
+    return map(mapper, probs)
 end
 
 function isfeasible(constraintfunction::F, solution::Vector) where {F<:Function}
