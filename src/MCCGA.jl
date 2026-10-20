@@ -13,6 +13,7 @@ export sample
 export isfeasible
 export mccga
 export hj
+export MCCGAResult
 
 
 

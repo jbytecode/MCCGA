@@ -14,9 +14,9 @@
         maxsamples = 10000,
     )
 
-    @test result isa Dict
+    @test result isa MCCGAResult
 
-    finalsolution = result["final_solution"]
+    finalsolution = result.final_solution
 
     @test finalsolution[1] >= 3
     @test finalsolution[1] <= 4
@@ -41,8 +41,8 @@ end
         maxsamples = 10000,
     )
 
-    finalsolution = result["final_solution"]
-    finalminimum = result["final_minimum"]
+    finalsolution = result.final_solution
+    finalminimum = result.final_minimum
 
     @test isapprox(finalsolution[1], 5.90133, atol = tol)
     @test isapprox(finalsolution[2], 0.5, atol = tol)
@@ -67,8 +67,8 @@ end
     )
 
 
-    finalsolution = result["final_solution"]
-    finalminimum = result["final_minimum"]
+    finalsolution = result.final_solution
+    finalminimum = result.final_minimum
 
     @test isapprox(finalsolution[1], 1.0, atol = tol)
     @test isapprox(finalsolution[2], 1.0, atol = tol)
@@ -95,8 +95,8 @@ end
     )
 
 
-    finalsolution = result["final_solution"]
-    finalminimum = result["final_minimum"]
+    finalsolution = result.final_solution
+    finalminimum = result.final_minimum
 
     @test isapprox(finalsolution[1], 0.0, atol = tol)
     @test isapprox(finalsolution[2], 0.0, atol = tol)

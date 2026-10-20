@@ -1,3 +1,13 @@
+struct MCCGAResult
+    initial_prob_vector::Vector{Float64}
+    final_prob_vector::Vector{Float64}
+    iterations::Int64
+    initial_solution::Vector{Float64}
+    final_solution::Vector{Float64}
+    initial_minimum::Float64
+    final_minimum::Float64
+end 
+
 function initialprobs(
     lower::Array{T,1},
     upper::Array{T,1};
@@ -8,7 +18,7 @@ function initialprobs(
 
     bitlen = p * 32
     mat = Array{Int8,2}(undef, maxsamples, bitlen)
-    for tries = 1:maxsamples
+    @inbounds for tries = 1:maxsamples
         randvalues = map((x, y) -> x + rand() * (y - x), lower, upper)
         mat[tries, :] .= bits(randvalues)
     end
@@ -82,7 +92,7 @@ function mccga(;
     maxsamples = 10000,
     constraintfunction::Union{G,Nothing} = nothing,
     λ = 1000,
-) where {T<:Number,F<:Function,G<:Function}
+)::MCCGAResult where {T<:Number,F<:Function,G<:Function}
 
     probvector = initialprobs(lower, upper, maxsamples = maxsamples)
     initial_probvector = copy(probvector)
@@ -98,7 +108,7 @@ function mccga(;
 
         winner, loser = getwinnerloser(ch1, ch2, costfunction, constraintfunction)
 
-        for i = 1:chsize
+        @inbounds for i = 1:chsize
             if winner[i] != loser[i]
                 if winner[i] == 1
                     probvector[i] += mutation
@@ -130,15 +140,15 @@ function mccga(;
         local_result = Optim.optimize(coupled, initial_solution, Optim.NelderMead())
     end
 
-    resultdict = Dict(
-        "initial_prob_vector" => initial_probvector,
-        "final_prob_vector" => sampledvector,
-        "iterations" => numiters,
-        "initial_solution" => floats(sampledvector),
-        "final_solution" => local_result.minimizer,
-        "initial_minimum" => costfunction(floats(sampledvector)),
-        "final_minimum" => costfunction(local_result.minimizer),
+    return MCCGAResult(
+        initial_probvector,
+        sampledvector,
+        numiters,
+        floats(sampledvector),
+        local_result.minimizer,
+        costfunction(floats(sampledvector)),
+        costfunction(local_result.minimizer),
     )
-
-    return resultdict
 end
+
+

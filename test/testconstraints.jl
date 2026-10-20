@@ -32,8 +32,8 @@
         maxsamples = 10000,
     )
 
-    finalsolution = result["final_solution"]
-    finalminimum = result["final_minimum"]
+    finalsolution = result.final_solution
+    finalminimum = result.final_minimum
 
     @info sum(finalsolution)
     @info finalsolution
